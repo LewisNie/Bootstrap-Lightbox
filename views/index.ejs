@@ -1,0 +1,94 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link href="/bower_components/ekko-lightbox/dist/ekko-lightbox.css" rel="stylesheet">
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <style>
+        body{
+            height: 1000px;
+        }
+        .container{
+            width: 900px;
+            min-height: 500px;
+            margin:0px auto;
+            box-shadow: 10px 10px 5px #888888;
+        }
+        .modal{
+            width: 600px;
+            margin: auto;
+        }
+
+    </style>
+</head>
+<body ng-app="lightBox" ng-controller="lightboxCtrl">
+<div class="container">
+<h1> welcome {{title}}</h1>
+
+<div class="row">
+<div ng-repeat="obj in images">
+    <a style="padding: 10px" href="{{obj.url}}" data-toggle="lightbox" data-gallery="multiimages" data-title="Luyuan's Gallery" class="col-md-2" data-footer="<a href='www.google.com'>gogle</a>">
+        <img ng-src="{{obj.thumbUrl}}" />
+    </a>
+</div>
+</div>
+</div>
+<script src="/app.js"> </script>
+<script src="/Controller.js"></script>
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="/bower_components/ekko-lightbox/dist/ekko-lightbox.js"></script>
+<script type="text/javascript">
+    $(document).ready(function ($) {
+        // delegate calls to data-toggle="lightbox"
+        $(document).delegate('*[data-toggle="lightbox"]:not([data-gallery="navigateTo"])', 'click', function(event) {
+            event.preventDefault();
+            return $(this).ekkoLightbox({
+                onShown: function() {
+                    if (window.console) {
+                        return console.log('Checking our the events huh?');
+                    }
+                },
+                onNavigate: function(direction, itemIndex) {
+                    if (window.console) {
+                        return console.log('Navigating '+direction+'. Current item: '+itemIndex);
+                    }
+                }
+            });
+        });
+
+        //Programatically call
+        $('#open-image').click(function (e) {
+            e.preventDefault();
+            $(this).ekkoLightbox();
+        });
+        $('#open-youtube').click(function (e) {
+            e.preventDefault();
+            $(this).ekkoLightbox();
+        });
+
+        // navigateTo
+        $(document).delegate('*[data-gallery="navigateTo"]', 'click', function(event) {
+            event.preventDefault();
+
+            var lb;
+            return $(this).ekkoLightbox({
+                onShown: function() {
+
+                    lb = this;
+
+                    $(lb.modal_content).on('click', '.modal-footer a', function(e) {
+
+                        e.preventDefault();
+                        lb.navigateTo(2);
+
+                    });
+
+                }
+            });
+        });
+
+
+    });
+</script>
+</body>
+</html>
